@@ -663,6 +663,12 @@ overflow:
 
 int vfprintf(FILE *restrict f, const char *restrict fmt, va_list ap)
 {
+#ifdef CKB_MUSL_DUMMIFY_PRINTF
+  (void) f;
+  (void) fmt;
+  (void) ap;
+  return 0;
+#else
 	va_list ap2;
 	int nl_type[NL_ARGMAX+1] = {0};
 	union arg nl_arg[NL_ARGMAX+1];
@@ -700,4 +706,5 @@ int vfprintf(FILE *restrict f, const char *restrict fmt, va_list ap)
 	FUNLOCK(f);
 	va_end(ap2);
 	return ret;
+#endif /* CKB_MUSL_DUMMIFY_PRINTF */
 }
